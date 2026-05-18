@@ -2,6 +2,7 @@ use subquerydb;
 select * from employees;
 
 -- window functions
+-- over
 select emp_id,name,salary,avg(salary) over() from employees;
 
 select emp_id,name,salary,max(salary) over(),
@@ -23,3 +24,21 @@ from employees;
 
 select emp_id,name,department,salary,sum(salary) over(order by department)
 from employees;
+
+-- partition by 
+select * from employees;
+
+select *,sum(salary) over(partition by department),
+sum(salary) over() from employees;
+
+select *,sum(salary) over(partition by name)
+from employees;
+
+select *,sum(salary) over(partition by manager_id)
+from employees;
+
+select *,sum(salary) over(partition by department order by salary)
+from employees;
+
+select name,department,salary,sum(salary) over(partition by name),
+(salary / sum(salary) over(partition by name))*100 from employees;
