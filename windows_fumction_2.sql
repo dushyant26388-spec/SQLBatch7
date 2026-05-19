@@ -50,3 +50,45 @@ select *, row_number() over() from employees;
 select *,row_number() over(order by emp_id) from employees;
 
 select *, row_number() over(partition by dept) from employees;
+
+-- 19/05/2026
+
+select *,row_number() over(order by salary),
+rank() over(order by salary),
+dense_rank() over(order by salary) from employees;
+
+select *,dense_rank() over(partition by dept order by salary desc) from employees;
+
+select *,dense_rank() over(partition by dept order by hire_year) from employees;
+
+select * from employees as e
+where salary=(select max(salary) from employees where dept=e.dept);
+
+select * from
+(select *, max(salary) over(partition by dept) as deptsalary from employees) as trh
+where salary=deptsalary;
+
+select * from
+(select *, rank() over(partition by dept order by salary desc) as rnk from employees) as temp
+where rnk=1;
+
+select * from
+(select *, rank() over(partition by dept order by salary desc) as rnk from employees) as temp
+where rnk=1;
+
+select * from employees where salary=
+(select max(salary) from employees where salary < (select max(salary) from employees));
+
+select * from 
+(select *, dense_rank() over(order by salary desc) as drank from employees) as result
+where drank=2;
+
+select * from employees where salary=
+(select min(salary) from employees where salary > (select min(salary) from employees));
+
+select * from 
+(select *, dense_rank() over(order by salary) as drank from employees) as result
+where drank=4;
+
+
+ 
