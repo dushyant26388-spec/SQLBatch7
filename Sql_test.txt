@@ -1,0 +1,93 @@
+1. Find total spending by each customer.
+select c.customer_name, sum(o.order_amount) as total_spending
+from customer as c
+join orders as o on c,customer_id=o.customer_id
+group by c.customer_name;
+
+
+2. Find customers whose total spending is greater than
+2000.
+
+select c.customer_name, sum(o.order_amount) as total_spending
+from customer as c
+join orders as o on c,customer_id=o.customer_id
+group by c.customer_name
+having sum(o.order_amount) > 2000;
+ 
+
+3.Find average order amount for each restaurant.
+select r.restaurant_name,avg(o.order_amount) as avg_order_amount
+from restaurant as r
+join orders as o on r.restaurant_id=o.resaturant_id
+group by resataurant_name;
+
+4. Categorize orders using CASE.
+select order_id, order_amount,
+	case
+	    when order_amount >= 1500 then 'expensive'
+	    when order_amount between 800 and 1499 then 'medium'
+	    when order_amount < 800 then 'budget'
+	end as order_category
+from orders;
+
+
+5. Find customers who placed more than 1 order.
+select c.customer_name, count(o.order_id) as total_orders
+from customer as c join orders as o 
+on c.customer_id=o.customer_id 
+group by c.customer_name
+having total_orders > 1;
+
+
+6. Display customer level using CASE based on total
+spending.
+
+select c.customer_name, sum(o.order_amount) as total_spending,
+	case 
+	    when sum(o.order_amount) >=3000 then vip'
+	    when sum(o.order_amount) between 1500 and 2999 then 'premium'
+	    when sum(o.order_amount) < 1500 then 'regular'
+	end as customer_level
+from customer as c join orders as o
+on c.customer_id=o.customer_id 
+group by c.customer_name;
+
+
+7. What is sql and how it’s different from MySQL
+sql= sql is a language used to store,retrieve,update and manage data in databases
+sql=structured query language
+ 
+
+,usql= MySQL is a database management system that uses sql to manage task 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
