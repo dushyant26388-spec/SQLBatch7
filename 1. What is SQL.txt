@@ -1,0 +1,27 @@
+1. What is SQL?
+
+Answer: SQL (Structured Query Language) is used to store, retrieve, update, and manage data in a database.
+
+2. What is a database?
+
+Answer: A database is an organized collection of related data.
+
+3. What is a table?
+
+Answer: A table stores data in rows and columns.
+
+4. What is a row?
+
+Answer: A row represents a single record in a table.
+
+5. What is a column?
+
+Answer: A column represents an attribute or field of a table.
+
+6. What is a Primary Key?
+
+Answer: A Primary Key uniquely identifies each row in a table and cannot contain NULL values.
+
+7. What is a Foreign Key?
+
+Answer: A Foreign Key is a column that refers to the Primary Key of another table.
