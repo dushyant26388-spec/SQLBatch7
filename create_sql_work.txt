@@ -1,0 +1,13 @@
+use newdb2;
+
+create table test1 (rollno int);
+insert into test1 values(10);
+insert into test1 values(30);
+insert into test1 values("aman"); -- error bcz of aman
+
+select * from test1;
+
+create table test2 (rollno tinyint unsigned);
+insert into test2 values(129);
+insert into test2 values(255);
+insert into test2 values(256); -- error
