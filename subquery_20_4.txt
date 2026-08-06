@@ -1,0 +1,52 @@
+-- Q11. Find orders placed by customers from Delhi.
+
+SELECT *
+FROM orders
+WHERE customer_id IN (
+    SELECT customer_id
+    FROM customers
+    WHERE city = 'Delhi'
+);
+-- Q12. Find products that have been ordered with a quantity greater than 3 at least once.
+
+SELECT *
+FROM products
+WHERE product_id IN (
+    SELECT product_id
+    FROM orders
+    WHERE quantity > 3
+);
+-- Q13. Find all customers whose credit limit is less than the credit limit of Ravi Kumar.
+
+SELECT *
+FROM customers
+WHERE credit_limit < (
+    SELECT credit_limit
+    FROM customers
+    WHERE customer_name = 'Ravi Kumar'
+);
+-- Q14. Find customers who have placed orders for products in the Furniture category.
+
+SELECT customer_name
+FROM customers
+WHERE customer_id IN (
+    SELECT customer_id
+    FROM orders
+    WHERE product_id IN (
+        SELECT product_id
+        FROM products
+        WHERE category = 'Furniture'
+    )
+);
+-- Q15. Find the second most expensive product.
+
+SELECT *
+FROM products
+WHERE price = (
+    SELECT MAX(price)
+    FROM products
+    WHERE price < (
+        SELECT MAX(price)
+        FROM products
+    )
+);
