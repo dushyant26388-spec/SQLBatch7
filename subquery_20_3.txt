@@ -1,0 +1,55 @@
+-- Q16. Find customers who exist in the CUSTOMERS table but have no record in the ORDERS table.
+
+SELECT *
+FROM customers c
+WHERE NOT EXISTS (
+    SELECT *
+    FROM orders o
+    WHERE c.customer_id = o.customer_id
+);
+-- Q17. Find products that were ordered more total quantity than the average total quantity ordered per product.
+
+SELECT product_id
+FROM orders
+GROUP BY product_id
+HAVING SUM(quantity) > (
+    SELECT AVG(total_qty)
+    FROM (
+        SELECT SUM(quantity) AS total_qty
+        FROM orders
+        GROUP BY product_id
+    ) AS avg_table
+);
+-- Q18. Find orders where the ordered quantity is greater than the average quantity of orders for that same product.
+
+SELECT *
+FROM orders o1
+WHERE quantity > (
+    SELECT AVG(quantity)
+    FROM orders o2
+    WHERE o1.product_id = o2.product_id
+);
+-- Q19. Find customers who have placed orders for every product that costs more than 10000.
+
+SELECT customer_name
+FROM customers c
+WHERE NOT EXISTS (
+    SELECT product_id
+    FROM products
+    WHERE price > 10000
+    AND product_id NOT IN (
+        SELECT product_id
+        FROM orders
+        WHERE customer_id = c.customer_id
+    )
+);
+-- Q20. Find products that have been ordered by at least 2 different customers.
+
+SELECT *
+FROM products
+WHERE product_id IN (
+    SELECT product_id
+    FROM orders
+    GROUP BY product_id
+    HAVING COUNT(DISTINCT customer_id) >= 2
+);
