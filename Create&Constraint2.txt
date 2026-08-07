@@ -1,0 +1,33 @@
+-- we do join. [Wrong name]
+SELECT *
+FROM orders o
+LEFT JOIN customers c
+ON o.customer_id=c.customer_id;
+
+
+
+INSERT INTO orders
+VALUES
+(3,101,500,1);
+
+-- wrong can't order if the product is not listed
+SELECT *
+FROM orders o
+LEFT JOIN products p
+ON o.product_id=p.product_id;
+
+
+
+
+-- ----------- $$$$$$$$ ------
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(50)
+);
+
+
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(50)
+);
