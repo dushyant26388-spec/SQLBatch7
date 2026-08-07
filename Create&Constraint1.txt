@@ -1,0 +1,49 @@
+drop database if exists foreigndb;
+create database foreigndb;
+
+use foreigndb;
+
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(50)
+);
+
+INSERT INTO customers VALUES
+(101,'John'),
+(102,'Alice'),
+(103,'David');
+
+
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(50)
+);
+
+INSERT INTO products VALUES
+(1,'Laptop'),
+(2,'Mouse'),
+(3,'Keyboard');
+
+
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT, -- foreign key
+    product_id INT,
+    quantity INT,
+    Constraint customer_id_fk foreign key (customer_id) references customers (customer_id)
+);
+
+desc orders;
+
+INSERT INTO orders
+VALUES
+(1,101,1,2);
+
+INSERT INTO orders
+VALUES
+(2,999,1,1);
+
+
+
