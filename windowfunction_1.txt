@@ -1,0 +1,17 @@
+create database windows10db;
+
+use windows10db;
+
+create table employees(id int,name varchar(20),dept varchar(20),salary int);
+
+insert into employees values(1,'a','hr',100),(2,'b','hr',200),(3,'c','marketing',300),
+(4,'d','marketing',400),(5,'e','hr',500);
+
+select sum(salary) from employees;
+select dept,sum(salary) from employees; -- error without grouyp by 
+
+select sum(salary) from employees group by dept;
+select dept,name,sum(salary) from employees group by dept;
+
+select dept,name,sum(salary) from employees group by dept,name;
+
