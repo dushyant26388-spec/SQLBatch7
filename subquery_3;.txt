@@ -1,0 +1,44 @@
+-- Q30. Among orders with status = 'Delivered', find those whose amount is greater than the average amount of all
+-- Delivered orders. Use a single-row scalar subquery to compute the average of Delivered orders. Return order_id,
+-- customer_id, amount, and status ordered by amount descending.
+select  order_id, customer_id, amount,status from orders 
+where amount > (select avg(amount) from orders where status ='delivered') and status ='delivered' order by amount desc;
+
+-- Section 3 — Intermediate Questions (Q31–Q45) 
+
+-- Q31. Using a correlated subquery, find all employees who earn more than the average salary of their own
+-- department. For each qualifying employee, also display their department's average salary (rounded to 2 decimal
+-- places). Order by department, then salary descending.
+select e.emp_name,e.department,e.salary,
+round((select avg(e2.salary) from employees as e2 where e2.department=e.department),2) as dept_avg from employees as e
+where e.salary > (select avg(e2.salary) from employees as e2 where e2.department=e.department) 
+Order by department,salary desc;
+
+-- Q32. For every employee, use a correlated subquery to count how many other employees in the same department
+-- earn strictly more than them. Display emp_name, department, salary, and this count as 'higher_earners'. Order by
+-- department, salary descending.
+select e.emp_name, e.department, e.salary,
+(select count(*) from employees as e2 where e2.department = e.department and e2.salary > e.salary) as high_earners
+from employees as e order by e.department,e.salary desc;
+
+-- Q33. Using a correlated subquery inside the WHERE clause, find all customers whose total order spend (sum of all
+-- their order amounts) is greater than the average total spend per customer across all ordering customers. Display
+-- customer_id, customer_name, and total_spend. Order by total_spend descending. (Compute per-customer total and
+-- the overall average both via subqueries — no window functions.)
+
+select c.customer_id, c.customer_name,
+(select sum(o.amount) from orders as o where o.customer_id = c.customer_id) as total_spend from customers as c where
+(select sum(o.amount) from orders as o where o.customer_id = c.customer_id) >
+(select avg(total_spend) from (select customer_id,sum(amount) as total_spend from orders group by customer_id) as customer_totals)
+order by total_spend desc;
+
+-- Q34. Using a subquery in the WHERE clause with IN and a GROUP BY / HAVING inside the subquery, find all
+-- employees who belong to departments where the average salary of the department is greater than 65,000. Return
+-- emp_name, department, and salary, ordered by department and salary descending.
+select emp_name, department,salary from employees 
+where department in (select department from employees group by department having avg(salary) > 65000)
+order by department,salary desc;
+
+-- Q35. For every row in the orders table, use a correlated subquery inside a CASE expression to label each order as
+-- 'Above Avg' if its amount is greater than or equal to that customer's own average order amount, and 'Below Avg'
+-- otherwise. Show order_id, customer_id, amount, and the label as 'vs_cust_avg'. Order by customer_id, order_id.
