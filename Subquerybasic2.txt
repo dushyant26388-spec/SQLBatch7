@@ -1,0 +1,46 @@
+11. Employees earning more than every employee
+
+Using ALL:
+
+SELECT emp_name, salary
+FROM employees
+WHERE salary > ALL (
+    SELECT salary
+    FROM employees
+);
+12. Employees who belong to a department
+
+Using IN:
+
+SELECT emp_name, dept_id
+FROM employees
+WHERE dept_id IN (
+    SELECT dept_id
+    FROM departments
+);
+13. Employees who do NOT belong to any department
+SELECT emp_name, dept_id
+FROM employees
+WHERE dept_id NOT IN (
+    SELECT dept_id
+    FROM departments
+);
+14. Employees earning more than their department average
+
+Correlated subquery:
+
+SELECT e1.emp_name, e1.dept_id, e1.salary
+FROM employees e1
+WHERE e1.salary > (
+    SELECT AVG(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e1.dept_id
+);
+15. Highest-paid employee in each department
+SELECT e1.emp_name, e1.dept_id, e1.salary
+FROM employees e1
+WHERE e1.salary = (
+    SELECT MAX(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e1.dept_id
+);
