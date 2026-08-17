@@ -1,0 +1,55 @@
+-- Q35. For every row in the orders table, use a correlated subquery inside a CASE expression to label each order as
+-- 'Above Avg' if its amount is greater than or equal to that customer's own average order amount, and 'Below Avg'
+-- otherwise. Show order_id, customer_id, amount, and the label as 'vs_cust_avg'. Order by customer_id, order_id.
+select o.order_id, o.customer_id, o.amount,
+case
+	when o.amount >= (select avg(amount) from orders as o2 where o2.customer_id = o.customer_id)
+    then 'Above avg'
+    else 'Below avg'
+end as vs_cust_avg
+from orders as o order by o.customer_id,o.order_id;
+
+-- Q36. Using a correlated subquery, find all products whose price is greater than the average price of other products
+-- in the same category. Display product_name, category, price, and the category average (rounded to 2 decimals) as
+-- 'cat_avg'. Order by category, price descending.
+select p.product_name, p.category, p.price,
+round((select avg(p2.price) from products as p2 where p2.category=p.category and p2.product_id <> p.product_id),2) as cat_avg from products as p
+where p.price > (select avg(p2.price) from products as p2 where  p2.category=p.category and p2.product_id <> p.product_id)
+order by p.category,p.price desc;
+
+-- Q37. Find all employees whose salary is greater than the salary of AT LEAST ONE employee in the Marketing
+-- department. Use ANY (or equivalently, > MIN of Marketing salaries). Return emp_name, department, and salary
+-- ordered by salary descending. Note: Ivy Turner (56,000) is the lowest-paid Marketing employee — so all employees
+-- earning above 56,000 qualify.
+select emp_name,department,salary from employees 
+where salary > Any (select salary from employees where department='marketing') order by salary desc;
+
+-- Q38. Find all employees whose salary is less than the salary of EVERY employee in the Finance department. In
+-- other words, their salary must be below even the minimum Finance salary (70,000). Use ALL (or < MIN of Finance).
+-- Return emp_name, department, and salary ordered by salary descending.
+select  emp_name,department,salary from employees 
+where salary < all (select salary from employees where department = 'finance') order by salary desc;
+
+-- Q39. Find customers who have placed at least one order AND whose every order has status = 'Delivered' (i.e., they
+-- have no Cancelled or Pending orders). Use a combination of EXISTS and NOT EXISTS. Return customer_id and
+-- customer_name ordered by customer_id.
+select   customer_id,customer_name from customers as c
+where exists (select 1 from orders as o where o.customer_id=c.customer_id)
+and not exists (select 1 from orders as o where o.customer_id=c.customer_id and o.status <> 'delivered') order by customer_id;
+
+-- Q40. Using nested IN subqueries, find all products that were ordered by at least one customer from the city of
+-- Mumbai. First find customer_ids from Mumbai, then find product_ids ordered by those customers, then return the
+-- product details. Show product_id, product_name, and category, ordered by product_id.
+select product_id, product_name,category from products where product_id in
+(select product_id from orders where customer_id in 
+(select customer_id from customers where city = 'mumbai')) order by product_id;
+
+-- Q41. Find the employee(s) with the second-highest salary in the entire company. Use a subquery that first finds the
+-- maximum salary, then an outer query that finds the maximum salary below that value. Return emp_name,
+-- department, and salary.
+select emp_name,department,salary from employees where salary =(select max(salary) from employees where salary < 
+(select max(salary) from employees));
+
+-- Q42. Using NOT EXISTS, find all departments where every single employee earns strictly more than 50,000. (i.e.,
+-- there is no employee in that department with salary <= 50,000.) Return just the department name, ordered
+-- alphabetically. Note: Leo Harris in HR earns exactly 50,000, so HR does not qualify.
