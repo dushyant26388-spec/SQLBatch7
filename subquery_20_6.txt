@@ -1,0 +1,28 @@
+-- Q42. Using NOT EXISTS, find all departments where every single employee earns strictly more than 50,000. (i.e.,
+-- there is no employee in that department with salary <= 50,000.) Return just the department name, ordered
+-- alphabetically. Note: Leo Harris in HR earns exactly 50,000, so HR does not qualify.
+select distinct e.department from employees as e where not exists
+(select 1 from employees as e2 where e2.department=e.department and e2.salary <= 50000) order by e.department;
+
+-- Q43. Using a correlated subquery in the WHERE clause, find all customers who have placed orders for at least 2
+-- different products (i.e., their orders contain at least 2 distinct product_id values). Return customer_id and
+-- customer_name, ordered by customer_id.
+select  c.customer_id,c.customer_name from customers as c 
+where (select count(distinct o.product_id) from orders as o where o.customer_id=c.customer_id) >= 2
+order by customer_id;
+
+-- Q44. Using a correlated subquery, find all employees whose salary is above the average salary of all employees
+-- hired in the same year as them. Show emp_name, department, salary, hire_year, and the year's average (rounded to
+-- 2 dp) as 'year_avg'. Order by hire_year, salary descending.
+select e.emp_name, e.department, e.salary, e.hire_year,
+round((select avg(e2.salary) from employees as e2 where e2.hire_year = e.hire_year),2) as year_avg from employees as e
+where e.salary > (select avg(e2.salary) from employees as e2 where e2.hire_year = e.hire_year)
+order by hire_year,salary desc;
+
+-- Q45. Using a correlated subquery, find all products whose stock_qty is less than the average stock_qty of all
+-- products in the same category. Display product_name, category, stock_qty, and the category average stock rounded
+-- to 2 dp as 'cat_avg_stock'. Order by category, stock_qty ascending.
+select p.product_name, p.category, p.stock_qty,
+round((select avg(p2.stock_qty) from products as p2 where p2.category = p.category),2) as cat_avg from products as p
+where p.stock_qty < (select avg(p2.stock_qty) from products as p2 where p2.category = p.category) 
+order by p.category,p.stock_qty; 
