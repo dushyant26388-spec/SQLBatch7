@@ -1,0 +1,43 @@
+11. Count employees in each department.
+Answer
+SELECT d.dept_name, COUNT(e.emp_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_id, d.dept_name;
+
+
+12. Show departments having more than 1 employee.
+Answer
+SELECT d.dept_name, COUNT(e.emp_id) AS employee_count
+FROM departments d
+INNER JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_id, d.dept_name
+HAVING COUNT(e.emp_id) > 1;
+
+13. Find the total salary of employees in each department.
+Answer
+SELECT d.dept_name, SUM(e.salary) AS total_salary
+FROM departments d
+INNER JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_id, d.dept_name;
+
+14. Find the average salary of employees in each department.
+Answer
+SELECT d.dept_name, AVG(e.salary) AS average_salary
+FROM departments d
+INNER JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_id, d.dept_name;
+
+15. Show employee names and their project names.
+Answer
+SELECT e.emp_name, p.project_name
+FROM employees e
+INNER JOIN projects p
+ON e.dept_id = p.dept_id;
+
+
+
