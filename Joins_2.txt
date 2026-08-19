@@ -1,0 +1,37 @@
+6. Show employees who work in Delhi.
+Answer
+SELECT e.emp_name, e.city, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.city = 'Delhi';
+
+7. Show employees along with their department location.
+Answer
+SELECT e.emp_name, d.dept_name, d.location
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id;
+
+8. Find employees whose salary is greater than 55000 and show their department.
+Answer
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.salary > 55000;
+
+9. Show all employees and their departments, even if department is NULL.
+Answer
+SELECT e.emp_name, e.dept_id, d.dept_name
+FROM employees e
+LEFT JOIN departments d
+ON e.dept_id = d.dept_id;
+
+10. Find departments that currently have no employees.
+Answer
+SELECT d.dept_id, d.dept_name
+FROM departments d
+LEFT JOIN employees e
+ON d.dept_id = e.dept_id
+WHERE e.emp_id IS NULL;
