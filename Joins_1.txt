@@ -1,0 +1,40 @@
+1. Show all employees with their department names.
+Answer
+SELECT e.emp_name, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id;
+
+
+2. Show employee name, department name, and salary.
+Answer
+SELECT e.emp_name, d.dept_name, e.salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id;
+
+3. Show all employees, including employees who don't belong to any department.
+Answer
+SELECT e.emp_name, d.dept_name
+FROM employees e
+LEFT JOIN departments d
+ON e.dept_id = d.dept_id;
+
+
+4. Show all departments, including departments having no employees.
+Answer
+SELECT d.dept_name, e.emp_name
+FROM departments d
+LEFT JOIN employees e
+ON d.dept_id = e.dept_id;
+
+5. Show employees who work in the IT department.
+Answer
+SELECT e.emp_name, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE d.dept_name = 'IT';
+
+
+
