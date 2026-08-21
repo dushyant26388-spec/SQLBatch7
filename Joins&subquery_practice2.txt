@@ -1,0 +1,125 @@
+Q10. Departments whose average salary is greater than company average
+SELECT d.dept_name, AVG(e.salary) AS dept_avg_salary
+FROM departments d
+INNER JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_id, d.dept_name
+HAVING AVG(e.salary) > (
+    SELECT AVG(salary)
+    FROM employees
+);
+
+Q11. Employees earning more than their department average
+SELECT e.emp_name,
+       d.dept_name,
+       e.salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.salary > (
+    SELECT AVG(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e.dept_id
+);
+
+Q12. Employees working on the same projects as Aman
+SELECT DISTINCT e.emp_name, p.project_name
+FROM employees e
+INNER JOIN employee_projects ep
+ON e.emp_id = ep.emp_id
+INNER JOIN projects p
+ON ep.project_id = p.project_id
+WHERE ep.project_id IN (
+    SELECT ep2.project_id
+    FROM employee_projects ep2
+    INNER JOIN employees e2
+    ON ep2.emp_id = e2.emp_id
+    WHERE e2.emp_name = 'Aman'
+)
+AND e.emp_name <> 'Aman';
+
+Q13. Employees working on at least one project
+SELECT e.emp_name
+FROM employees e
+WHERE e.emp_id IN (
+    SELECT emp_id
+    FROM employee_projects
+);
+
+Q14. Employees NOT working on any project
+SELECT e.emp_name
+FROM employees e
+WHERE e.emp_id NOT IN (
+    SELECT emp_id
+    FROM employee_projects
+);
+
+Q15. Department having the highest average salary
+SELECT d.dept_name, AVG(e.salary) AS avg_salary
+FROM departments d
+INNER JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_id, d.dept_name
+ORDER BY avg_salary DESC
+LIMIT 1;
+
+Q16. Employees earning maximum salary in their department
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.salary = (
+    SELECT MAX(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e.dept_id
+);
+
+Q17. Employees working in department having highest total salary
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.dept_id = (
+    SELECT e2.dept_id
+    FROM employees e2
+    GROUP BY e2.dept_id
+    ORDER BY SUM(e2.salary) DESC
+    LIMIT 1
+);
+
+Q18. Projects whose budget is greater than average project budget
+SELECT p.project_name, p.budget, d.dept_name
+FROM projects p
+INNER JOIN departments d
+ON p.dept_id = d.dept_id
+WHERE p.budget > (
+    SELECT AVG(budget)
+    FROM projects
+);
+
+Q19. Employees who worked more hours than average hours
+SELECT e.emp_name,
+       p.project_name,
+       ep.hours_worked
+FROM employees e
+INNER JOIN employee_projects ep
+ON e.emp_id = ep.emp_id
+INNER JOIN projects p
+ON ep.project_id = p.project_id
+WHERE ep.hours_worked > (
+    SELECT AVG(hours_worked)
+    FROM employee_projects
+);
+
+Q20. Employees working on projects belonging to their own department
+SELECT e.emp_name,
+       d.dept_name,
+       p.project_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+INNER JOIN employee_projects ep
+ON e.emp_id = ep.emp_id
+INNER JOIN projects p
+ON ep.project_id = p.project_id
+WHERE p.dept_id = e.dept_id;
