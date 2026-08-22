@@ -1,0 +1,31 @@
+1. Find employees earning more than the average salary
+SELECT emp_name, salary
+FROM employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+);
+
+2. Find the second-highest salary.
+SELECT MAX(salary) AS second_highest_salary
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM employees
+);
+
+3. Find the highest salary in each department.
+SELECT department, MAX(salary) AS highest_salary
+FROM employees
+GROUP BY department;
+
+4. Find departments having more than 3 employees.
+SELECT department, COUNT(*) AS employee_count
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 3;
+
+5. Find employees who work in the IT department.
+SELECT emp_name, salary
+FROM employees
+WHERE department = 'IT';
