@@ -1,0 +1,113 @@
+11. Find employees who are assigned to a project.
+SELECT e.emp_name, p.project_name
+FROM employees e
+INNER JOIN projects p
+ON e.emp_id = p.emp_id;
+
+12. Find employees who are not assigned to any project.
+SELECT e.emp_name
+FROM employees e
+LEFT JOIN projects p
+ON e.emp_id = p.emp_id
+WHERE p.project_id IS NULL;
+
+13. Find projects that are not assigned to any employee.
+SELECT p.project_name
+FROM projects p
+LEFT JOIN employees e
+ON p.emp_id = e.emp_id
+WHERE e.emp_id IS NULL;
+
+14. Find the number of employees in each department.
+SELECT d.dept_name, COUNT(e.emp_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_name;
+
+15. Find departments having more than 1 employee.
+SELECT d.dept_name, COUNT(e.emp_id) AS employee_count
+FROM departments d
+INNER JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_name
+HAVING COUNT(e.emp_id) > 1;
+
+16. Find the highest salary in each department.
+SELECT d.dept_name, MAX(e.salary) AS highest_salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;
+
+17. Find the average salary in each department.
+SELECT d.dept_name, AVG(e.salary) AS average_salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;
+
+18. Display employees with their departments ordered by salary from highest to lowest.
+SELECT e.emp_name, d.dept_name, e.salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+ORDER BY e.salary DESC;
+
+19. Find the highest-paid employee.
+SELECT e.emp_name, e.salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+ORDER BY e.salary DESC
+LIMIT 1;
+
+20. Display each employee and the number of projects assigned to them.
+SELECT e.emp_name, COUNT(p.project_id) AS project_count
+FROM employees e
+LEFT JOIN projects p
+ON e.emp_id = p.emp_id
+GROUP BY e.emp_id, e.emp_name;
+
+21. Find employees who have more than one project.
+SELECT e.emp_name, COUNT(p.project_id) AS project_count
+FROM employees e
+INNER JOIN projects p
+ON e.emp_id = p.emp_id
+GROUP BY e.emp_id, e.emp_name
+HAVING COUNT(p.project_id) > 1;
+
+22. Find employees from IT department earning more than 50000.
+SELECT e.emp_name, e.salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE d.dept_name = 'IT'
+AND e.salary > 50000;
+
+23. Find employees whose salary is greater than their department's average salary.
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.salary > (
+    SELECT AVG(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e.dept_id
+);
+
+24. Find the department having the highest average salary.
+SELECT d.dept_name, AVG(e.salary) AS average_salary
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+ORDER BY average_salary DESC
+LIMIT 1;
+
+25. Display employee and manager names using SELF JOIN.
+SELECT e.emp_name AS employee,
+       m.emp_name AS manager
+FROM employees2 e
+LEFT JOIN employees2 m
+ON e.manager_id = m.emp_id;
