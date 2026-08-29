@@ -1,0 +1,27 @@
+Q1. Find all employees whose salary is greater than 50000.
+SELECT *
+FROM employees
+WHERE salary > 50000;
+
+Q2. Find the highest salary.
+SELECT MAX(salary)
+FROM employees;
+
+Q3. Find the second highest salary.
+SELECT MAX(salary)
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM employees
+);
+
+Q4. Count employees in each department.
+SELECT department_id, COUNT(*) AS employee_count
+FROM employees
+GROUP BY department_id;
+
+Q5. Find departments having more than 5 employees.
+SELECT department_id, COUNT(*) AS employee_count
+FROM employees
+GROUP BY department_id
+HAVING COUNT(*) > 5;
