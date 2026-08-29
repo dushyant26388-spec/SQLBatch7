@@ -1,0 +1,33 @@
+Q6. Find employees earning more than the average salary.
+SELECT *
+FROM employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+);
+
+Q7. Find employees who do not belong to any department.
+SELECT *
+FROM employees
+WHERE department_id IS NULL;
+
+Q8. Find duplicate names.
+SELECT name, COUNT(*) AS count
+FROM employees
+GROUP BY name
+HAVING COUNT(*) > 1;
+
+Q9. Find the lowest salary in each department.
+SELECT department_id, MIN(salary) AS lowest_salary
+FROM employees
+GROUP BY department_id;
+
+Q10. Find employees whose salary is among the top 3 distinct salaries.
+SELECT *
+FROM employees
+WHERE salary IN (
+    SELECT DISTINCT salary
+    FROM employees
+    ORDER BY salary DESC
+    LIMIT 3
+);
