@@ -1,0 +1,96 @@
+11. Find employees who earn more than at least one HR employee
+SELECT name, salary
+FROM employees
+WHERE salary > ANY (
+    SELECT salary
+    FROM employees
+    WHERE department = 'HR'
+);
+12. Find departments having employees
+SELECT DISTINCT department
+FROM employees
+WHERE department IN (
+    SELECT department
+    FROM employees
+);
+13. Find employees who work in a department that has more than 1 employee
+
+Correlated Subquery:
+
+SELECT name, department
+FROM employees e
+WHERE (
+    SELECT COUNT(*)
+    FROM employees
+    WHERE department = e.department
+) > 1;
+14. Find employees earning more than their department's average salary
+
+Very important correlated subquery question:
+
+SELECT name, department, salary
+FROM employees e
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department = e.department
+);
+15. Find the highest-paid employee in each department
+SELECT name, department, salary
+FROM employees e
+WHERE salary = (
+    SELECT MAX(salary)
+    FROM employees
+    WHERE department = e.department
+);
+16. Find the lowest-paid employee in each department
+SELECT name, department, salary
+FROM employees e
+WHERE salary = (
+    SELECT MIN(salary)
+    FROM employees
+    WHERE department = e.department
+);
+17. Find employees whose salary is greater than the overall average
+SELECT *
+FROM employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+);
+18. Find employees who do not have the highest salary
+SELECT name, salary
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM employees
+);
+19. Find the third highest distinct salary
+SELECT DISTINCT salary
+FROM employees
+ORDER BY salary DESC
+LIMIT 1 OFFSET 2;
+
+Using a subquery:
+
+SELECT MAX(salary)
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM employees
+    WHERE salary < (
+        SELECT MAX(salary)
+        FROM employees
+    )
+);
+20. Find employees who earn the second highest salary
+SELECT name, salary
+FROM employees
+WHERE salary = (
+    SELECT MAX(salary)
+    FROM employees
+    WHERE salary < (
+        SELECT MAX(salary)
+        FROM employees
+    )
+);
