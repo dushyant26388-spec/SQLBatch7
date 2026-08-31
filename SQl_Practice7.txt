@@ -1,0 +1,62 @@
+Q6. Rank all doctors by salary within their specialty from highest to lowest. Assign the same rank to doctors with
+equal salaries and leave gaps in the sequence after ties. Display the doctor name, specialty, salary, and rank. Order
+by specialty and rank.
+
+select doctor_name, specialty, salary,
+rank() over(partition by specialty order by salary desc) as sal_rnk
+from doctors order by specialty, sal_rnk;
+
+
+
+ Q9. Find all patients who have no treatment records at all. Show their name, ward, and admission date. Order by
+patient name.
+
+select p.patient_name, p.ward, p.admit_date 
+from patients as p left join treatments as t on p.patient_id = t.patient_id
+where t.patient_id is null 
+order by p.patient_name; 
+
+
+
+Q10. Find the single most expensive treatment type in each ward. If two treatment types share the same highest
+cost in a ward, include both. Display the ward, treatment name, and cost. Order by ward.
+
+select t.ward, t.treatment, t.cost from patients as p
+join treatments as t on p.patient_id = t.patient_id
+where t.cost=
+(select max(t2.cost) from patients p2 join treatments as t2
+on p2.patient_id=t2.patient_id where p2.ward=p.ward)
+order by p.ward;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
