@@ -1,0 +1,35 @@
+Q1. For each medical specialty, calculate the total number of doctors, their average salary (rounded to 2 decimal
+places), and total salary. Show only specialties where the average salary is greater than 170,000. Sort by average
+salary descending.
+
+select specialty, count(*) as doctor_count, round(avg(salary),2) as avg_salary, sum(salary) as total_salary
+from doctors group by specialty having avg(salary) > 170000 order by avg_salary desc; 
+
+
+ Q2. List every doctor along with their supervisor's name. Doctors who have no supervisor must still appear in the
+result with NULL shown in the supervisor column. Order by doctor ID.
+
+select d.doctor_name, d.specialty, s.doctor_name as supervisior_name 
+from doctors as d left join doctors as s on d.supervisor_id = s.doctor_id
+group by specialty order by d.do0ctor_id; 
+
+
+
+Q3. For every doctor, show their name, specialty, total number of distinct patients they treated, and the total cost of
+all treatments given to their patients. Doctors with no patients must appear with 0 for both counts. Order by doctor ID.
+
+select d.doctor_name, d.specialty, count(distinct p.patient_id) as patient_count, colaesce(sum(t.cost),0) as total_treatmment_cost
+from doctors as d left join patients as p on d.doctor_id = p.doctor_id 
+left join treatments as t on p.patient_id = t.patient_id
+group by d.doctor_id, d.doctor_name, d.specialty
+order by d.doctor_id;
+
+
+
+Q4. Find the names, wards, and ages of all patients who received at least one treatment that cost more than
+50,000. Order the results alphabetically by patient name.
+
+select distinct p.patient_name, p.ward, p.age 
+from patients as p join treatments as t on p.patient_id = t.patient_id
+where t.cost > 50000 order by patient_name; 
+
