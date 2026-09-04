@@ -1,0 +1,68 @@
+Q1. Display employee name and department name.
+SELECT e.emp_name, d.dept_name
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id;
+
+Q2. Find all employees who work in the IT department.
+SELECT e.emp_name
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE d.dept_name = 'IT';
+
+Q3. Display employee name, salary and department name.
+SELECT e.emp_name, e.salary, d.dept_name
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id;
+
+Q4. Find departments having no employees.
+SELECT d.dept_name
+FROM departments d
+LEFT JOIN employees e
+ON d.dept_id = e.dept_id
+WHERE e.emp_id IS NULL;
+
+Q5. Find the number of employees in each department.
+SELECT d.dept_name, COUNT(e.emp_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e
+ON d.dept_id = e.dept_id
+GROUP BY d.dept_name;
+
+Q6. Find employees whose salary is greater than 60000.
+SELECT e.emp_name, e.salary
+FROM employees e
+WHERE e.salary > 60000;
+
+Q7. Display employee and their manager name.
+SELECT e.emp_name AS employee,
+       m.emp_name AS manager
+FROM employees e
+LEFT JOIN employees m
+ON e.manager_id = m.emp_id;
+
+Q8. Find employees earning more than the average salary.
+SELECT emp_name, salary
+FROM employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+);
+
+Q9. Find the employee with the highest salary.
+SELECT emp_name, salary
+FROM employees
+WHERE salary = (
+    SELECT MAX(salary)
+    FROM employees
+);
+
+Q10. Find employees earning the minimum salary.
+SELECT emp_name, salary
+FROM employees
+WHERE salary = (
+    SELECT MIN(salary)
+    FROM employees
+);
