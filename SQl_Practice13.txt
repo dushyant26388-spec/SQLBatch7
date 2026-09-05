@@ -1,0 +1,94 @@
+Q41. Find employees earning more than the highest salary in HR.
+SELECT emp_name, salary
+FROM employees
+WHERE salary > (
+    SELECT MAX(e.salary)
+    FROM employees e
+    JOIN departments d
+    ON e.dept_id = d.dept_id
+    WHERE d.dept_name = 'HR'
+);
+
+Q42. Find employees earning less than the average salary.
+SELECT emp_name, salary
+FROM employees
+WHERE salary < (
+    SELECT AVG(salary)
+    FROM employees
+);
+
+Q43. Find employees earning exactly the average salary.
+SELECT emp_name, salary
+FROM employees
+WHERE salary = (
+    SELECT AVG(salary)
+    FROM employees
+);
+
+
+Q44. Find employees who earn more than Aman.
+SELECT emp_name, salary
+FROM employees
+WHERE salary > (
+    SELECT salary
+    FROM employees
+    WHERE emp_name = 'Aman'
+);
+
+Q45. Find employees earning the same salary as Ravi.
+SELECT emp_name, salary
+FROM employees
+WHERE salary = (
+    SELECT salary
+    FROM employees
+    WHERE emp_name = 'Ravi'
+);
+
+Q46. Find employees who work in the same department as Aman.
+SELECT emp_name, dept_id
+FROM employees
+WHERE dept_id = (
+    SELECT dept_id
+    FROM employees
+    WHERE emp_name = 'Aman'
+);
+
+Q47. Find employees who work in the same department as Aman but are not Aman.
+SELECT emp_name, dept_id
+FROM employees
+WHERE dept_id = (
+    SELECT dept_id
+    FROM employees
+    WHERE emp_name = 'Aman'
+)
+AND emp_name <> 'Aman';
+
+Q48. Find the third-highest distinct salary.
+SELECT MAX(salary) AS third_highest
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM employees
+    WHERE salary < (
+        SELECT MAX(salary)
+        FROM employees
+    )
+);
+
+Q49. Find employees earning one of the top 3 distinct salaries.
+SELECT emp_name, salary
+FROM employees
+WHERE salary IN (
+    SELECT DISTINCT salary
+    FROM employees
+    ORDER BY salary DESC
+    LIMIT 3
+);
+
+Q50. Find employees whose salary is not the maximum salary.
+SELECT emp_name, salary
+FROM employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM employees
+);
