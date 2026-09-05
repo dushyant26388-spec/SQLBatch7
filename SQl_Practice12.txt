@@ -1,0 +1,71 @@
+Q31. Display all employees with their department names.
+SELECT e.emp_name, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id;
+
+Q32. Display all employees, including employees whose department doesn't exist.
+SELECT e.emp_name, d.dept_name
+FROM employees e
+LEFT JOIN departments d
+ON e.dept_id = d.dept_id;
+
+
+
+Q33. Display all departments, including departments having no employees.
+SELECT d.dept_name, e.emp_name
+FROM departments d
+LEFT JOIN employees e
+ON d.dept_id = e.dept_id;
+
+Q34. Find employees who don't have a valid department.
+SELECT e.emp_name
+FROM employees e
+LEFT JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE d.dept_id IS NULL;
+
+Q35. Find the total salary paid by each department.
+SELECT d.dept_name, SUM(e.salary) AS total_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;
+
+Q36. Find the average salary of each department.
+SELECT d.dept_name, AVG(e.salary) AS avg_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;
+
+Q37. Find departments where the total salary is greater than 100000.
+SELECT d.dept_name, SUM(e.salary) AS total_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+HAVING SUM(e.salary) > 100000;
+
+
+Q38. Find departments having more than 1 employee.
+SELECT d.dept_name, COUNT(e.emp_id) AS employee_count
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+HAVING COUNT(e.emp_id) > 1;
+
+Q39. Find the highest salary in each department.
+SELECT d.dept_name, MAX(e.salary) AS highest_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;
+
+Q40. Find the lowest salary in each department.
+SELECT d.dept_name, MIN(e.salary) AS lowest_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;
