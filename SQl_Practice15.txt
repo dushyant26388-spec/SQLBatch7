@@ -1,0 +1,92 @@
+Q61. Find employees earning more than their manager.
+SELECT e.emp_name AS employee,
+       e.salary AS employee_salary,
+       m.emp_name AS manager,
+       m.salary AS manager_salary
+FROM employees e
+JOIN employees m
+ON e.manager_id = m.emp_id
+WHERE e.salary > m.salary;
+
+Q62. Find managers who have at least one employee.
+SELECT DISTINCT m.emp_name
+FROM employees e
+JOIN employees m
+ON e.manager_id = m.emp_id;
+
+Q63. Find employees who are not managers.
+SELECT e.emp_name
+FROM employees e
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM employees m
+    WHERE m.manager_id = e.emp_id
+);
+
+Q64. Find the department with the highest average salary.
+SELECT d.dept_name, AVG(e.salary) AS avg_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+ORDER BY avg_salary DESC
+LIMIT 1;
+
+Q65. Find the department with the highest total salary.
+SELECT d.dept_name, SUM(e.salary) AS total_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+ORDER BY total_salary DESC
+LIMIT 1;
+
+Q66. Find employees whose salary is higher than the average salary of their department.
+SELECT e.emp_name, e.salary
+FROM employees e
+WHERE e.salary > (
+    SELECT AVG(e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e.dept_id
+);
+Q67. Find departments where the average salary is greater than the company average salary.
+SELECT d.dept_name, AVG(e.salary) AS avg_salary
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+HAVING AVG(e.salary) > (
+    SELECT AVG(salary)
+    FROM employees
+);
+
+Q68. Find employees whose salary is greater than all HR employees.
+SELECT e.emp_name, e.salary
+FROM employees e
+WHERE e.salary > ALL (
+    SELECT e2.salary
+    FROM employees e2
+    JOIN departments d
+    ON e2.dept_id = d.dept_id
+    WHERE d.dept_name = 'HR'
+);
+Q69. Find employees whose salary is greater than at least one HR employee.
+SELECT e.emp_name, e.salary
+FROM employees e
+WHERE e.salary > ANY (
+    SELECT e2.salary
+    FROM employees e2
+    JOIN departments d
+    ON e2.dept_id = d.dept_id
+    WHERE d.dept_name = 'HR'
+);
+
+Q70. Find the second-highest salary in each department.
+SELECT e.emp_name, e.dept_id, e.salary
+FROM employees e
+WHERE 1 = (
+    SELECT COUNT(DISTINCT e2.salary)
+    FROM employees e2
+    WHERE e2.dept_id = e.dept_id
+      AND e2.salary > e.salary
+);
